@@ -12,7 +12,10 @@ use ndless::input::{iter_keys, wait_key_pressed, wait_no_key_pressed, Key};
 use ndless::process::exit;
 use ndless::thread::sleep;
 use ndless::time::SystemTime;
-use ndless_sdl::{nsdl::{Font, FontOptions}, image};
+use ndless_sdl::{
+    image,
+    nsdl::{Font, FontOptions},
+};
 
 use ndless::msg::{msg_2b, msg_3b, Button};
 
@@ -29,18 +32,6 @@ struct Cell {
 fn main() {
     // screen setup
     let screen = ndless_sdl::init_default().expect("failed to set video mode");
-
-
-
-
-    let flags = image::init(&[image::InitFlag::PNG]);
-    // let img = image::load_file("/documents/englisch.png.tns");
-
-
-
-
-
-
 
     // used for score, color indicates difficulty
     let fonts = vec![
@@ -190,6 +181,10 @@ fn start_game_loop(
             return;
         }
 
+        // draw score
+        let message = format!("Punkte: {}", pts);
+        screen.draw_str(&fonts[*difficulty as usize], &message, 10, 10);
+
         // blank score area before redrawing
         screen.fill_rect(
             Some(ndless_sdl::Rect {
@@ -200,10 +195,6 @@ fn start_game_loop(
             }),
             ndless_sdl::video::RGB(0, 0, 0),
         );
-
-        // draw score
-        let message = format!("Punkte: {}", pts);
-        screen.draw_str(&fonts[*difficulty as usize], &message, 10, 10);
 
         for (i, cell) in cells.iter().enumerate() {
             // self hit detection
@@ -277,8 +268,8 @@ fn start_game_loop(
             );
         }
 
-        manager.delay();
         screen.flip();
+        manager.delay();
     }
 }
 
