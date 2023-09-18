@@ -315,14 +315,7 @@ fn get_direction(input: u8, current: u8) -> (u8, bool) {
         _ => panic!("nein"),
     }
 }
-// fn wait_no_key_pressed() {
-//     loop {
-//         if iter_keys().count() == 0 {
-//             break;
-//         }
-//         sleep(Duration::from_millis(2));
-//     }
-// }
+
 fn pause_game(manager: &mut FPS, difficulty: &mut u8) {
     // wait for key up (otherwise, still pressed scratchpad key instantly resumes game)
     wait_no_key_pressed();
