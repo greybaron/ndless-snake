@@ -12,10 +12,7 @@ use ndless::input::{iter_keys, wait_key_pressed, wait_no_key_pressed, Key};
 use ndless::process::exit;
 use ndless::thread::sleep;
 use ndless::time::SystemTime;
-use ndless_sdl::{
-    image,
-    nsdl::{Font, FontOptions},
-};
+use ndless_sdl::nsdl::{Font, FontOptions};
 
 use ndless::msg::{msg_2b, msg_3b, Button};
 

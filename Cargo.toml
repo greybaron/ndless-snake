@@ -1,8 +1,8 @@
 [package]
-name = "schadsoftware"
-version = "0.1.0"
-authors = ["florian"]
-edition = "2018"
+name = "nSnake"
+version = "1.0.0"
+authors = ["Florian Schmidt"]
+edition = "2021"
 
 [dependencies]
 ndless = { git = 'https://github.com/pranshuthegamer/ndless-rs.git' }
@@ -11,9 +11,9 @@ ndless-sdl = "0.2.0"
 rand = {version = "0.8.5", features = ["small_rng"], default-features = false}
 
 [package.metadata.zehn]
-name = "schadsoftware"
+name = "nSnake"
 compress = true
-notice = "Auto generated with cargo-generate"
+notice = "Snake for ndless"
 flags = "--240x320-support true --uses-lcd-blit true"
 
 [profile.release]
