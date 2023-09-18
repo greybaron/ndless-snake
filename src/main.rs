@@ -178,10 +178,6 @@ fn start_game_loop(
             return;
         }
 
-        // draw score
-        let message = format!("Punkte: {}", pts);
-        screen.draw_str(&fonts[*difficulty as usize], &message, 10, 10);
-
         // blank score area before redrawing
         screen.fill_rect(
             Some(ndless_sdl::Rect {
@@ -192,6 +188,25 @@ fn start_game_loop(
             }),
             ndless_sdl::video::RGB(0, 0, 0),
         );
+
+        // dont remove oldest vec item if score increased
+        if cells.len() > usize::from(length) {
+            let delete_cell = cells.pop_front().unwrap();
+
+            screen.fill_rect(
+                Some(ndless_sdl::Rect {
+                    x: delete_cell.x,
+                    y: delete_cell.y,
+                    w: 5,
+                    h: 5,
+                }),
+                ndless_sdl::video::RGB(0, 0, 0),
+            );
+        }
+
+        // draw score
+        let message = format!("Punkte: {}", pts);
+        screen.draw_str(&fonts[*difficulty as usize], &message, 10, 10);
 
         for (i, cell) in cells.iter().enumerate() {
             // self hit detection
@@ -248,21 +263,6 @@ fn start_game_loop(
             pts += 1;
             length += 2;
             food_cell = new_food_cell(small_rng, &cells);
-        }
-
-        // dont remove oldest vec item if score increased
-        if cells.len() > usize::from(length) {
-            let delete_cell = cells.pop_front().unwrap();
-
-            screen.fill_rect(
-                Some(ndless_sdl::Rect {
-                    x: delete_cell.x,
-                    y: delete_cell.y,
-                    w: 5,
-                    h: 5,
-                }),
-                ndless_sdl::video::RGB(0, 0, 0),
-            );
         }
 
         screen.flip();
