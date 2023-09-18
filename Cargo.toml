@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 ndless = { git = 'https://github.com/pranshuthegamer/ndless-rs.git' }
 ndless-handler = { git = 'https://github.com/pranshuthegamer/ndless-rs.git' }
-ndless-sdl = "0.2.0"
+ndless-sdl = { git = 'https://github.com/pranshuthegamer/ndless-rs.git' }
 rand = {version = "0.8.5", features = ["small_rng"], default-features = false}
 
 [package.metadata.zehn]

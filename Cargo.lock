@@ -143,8 +143,7 @@ dependencies = [
 [[package]]
 name = "ndless-sdl"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df16a397e4a72164cda99219f65e5597e8b50d19274a58d6cdf350d7fed2a4e8"
+source = "git+https://github.com/pranshuthegamer/ndless-rs.git#d51f0d2d019568b5c7b97ee86f82da6426b2b5ad"
 dependencies = [
  "cstr_core",
  "cty 0.2.2",
