@@ -87,6 +87,7 @@ fn main() {
     let mut a_jacobi = a;
 
     mess += &print_mat("Matrix A", &a);
+    println!("{}", mess);
 
     let mut u_matrizen: Vec<Mat> = Vec::new();
 
