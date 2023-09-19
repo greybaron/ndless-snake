@@ -78,12 +78,12 @@ impl MatrixOperationen for Mat {
 
 fn main() {
 
-    let mut small_rng = SmallRng::seed_from_u64(
-        SystemTime::now()
-            .duration_since(SystemTime::UNIX_EPOCH)  
-            .unwrap()
-            .as_secs(),
-    );
+    // let mut small_rng = SmallRng::seed_from_u64(
+    //     SystemTime::now()
+    //         .duration_since(SystemTime::UNIX_EPOCH)  
+    //         .unwrap()
+    //         .as_secs(),
+    // );
 
     let mut mess = String::new();
     let a = [
