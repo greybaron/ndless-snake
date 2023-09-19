@@ -8,7 +8,7 @@ use ndless::msg::msg;
 // use rand::rngs::SmallRng;
 // use rand::{Rng, SeedableRng};
 
-type Mat = [[f32;  8]; 8];
+type Mat = [[f32;  4]; 4];
 
 trait MatrixOperationen {
     fn neu_einheit() -> Self;
