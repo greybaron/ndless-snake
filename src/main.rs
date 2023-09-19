@@ -166,14 +166,6 @@ fn main() {
         .multipliziere(&ah_rekonstr_mat)
         .multipliziere(&u321_transponiert_multipliziert);
     print_mat(&a_rekonstr_titel, &a_rekonstr_mat.runde(4));
-
-    // auf Windows schließt sich CMD sonst sofort
-    if cfg!(target_os = "windows") {
-        use std::io;
-        use std::io::prelude::*;
-        println!("Drücke eine beliebige Taste zum Beenden...");
-        let _ = io::stdin().read(&mut [0u8]).unwrap();
-    }
 }
 
 fn print_mat(name: &str, mat: &Mat) {
