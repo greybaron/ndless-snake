@@ -155,7 +155,7 @@ fn print_mat(name: &str, mat: &Mat) -> String {
     let hor_strich_breite = mat.len() * 10 - 1;
 
     // Name gefolgt vom ersten horizontalen Trennstrich
-    str += &format!("{name}\n {:—<1$}", "", hor_strich_breite);
+    str += &format!("{name}:\n{:—<1$}", "", hor_strich_breite);
 
 
     for zeile in mat {
