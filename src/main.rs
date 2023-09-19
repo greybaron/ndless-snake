@@ -130,7 +130,7 @@ fn main() {
     let ah_rekonstr_mat = u321_transponiert_multipliziert
         .multipliziere(&a)
         .multipliziere(&u123_multipliziert);
-    print_mat(&ah_rekonstr_titel, &ah_rekonstr_mat.runde(4));
+    mess += &print_mat(&ah_rekonstr_titel, &ah_rekonstr_mat.runde(4));
 
     // Erzeugung von A
     let mut a_rekonstr_titel = String::from("A = ");
@@ -145,7 +145,7 @@ fn main() {
     let a_rekonstr_mat = u123_multipliziert
         .multipliziere(&ah_rekonstr_mat)
         .multipliziere(&u321_transponiert_multipliziert);
-    print_mat(&a_rekonstr_titel, &a_rekonstr_mat.runde(4));
+    mess += &print_mat(&a_rekonstr_titel, &a_rekonstr_mat.runde(4));
 
     msg("Hessenberg", &mess);
 }
@@ -212,7 +212,7 @@ fn jacobi_transform(a: &mut Mat, i0: usize, j0: usize, iteration: usize, mess: &
     *mess += &format!("Eliminiere mit Φ ≈ {:.3}.\n", cos_phi.acos());
 
     let u = ermittle_u(p0, q0, sin_phi, cos_phi);
-    print_mat(&format!("U{}", iteration + 1), &u);
+    *mess += &print_mat(&format!("U{}", iteration + 1), &u);
 
     *a = u.transponiere().multipliziere(a).multipliziere(&u);
     u
