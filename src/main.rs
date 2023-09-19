@@ -4,6 +4,10 @@ extern crate ndless_handler;
 use ndless::prelude::*;
 use ndless::msg::msg;
 
+use ndless::time::SystemTime;
+use rand::rngs::SmallRng;
+use rand::{Rng, SeedableRng};
+
 type Mat = [[f32; 4]; 4];
 
 trait MatrixOperationen {
@@ -73,6 +77,9 @@ impl MatrixOperationen for Mat {
 }
 
 fn main() {
+
+    
+
     let mut mess = String::new();
     // let a = [
     //     [1.0, 2.0, 3.0, 4.0],
@@ -80,7 +87,12 @@ fn main() {
     //     [9.0, 3.0, 11.0, 12.0],
     //     [12.0, 1.0, 6.0, 7.0],
     // ];
-    let a = Mat::new_random(8, 8);
+    let a = Mat::default();
+    for zeile in a.iter().enumerate() {
+        for j in zeile {
+            *j = SmallRng::gen_range(small_rng, 0..5);
+        }
+    }
 
     // wird benutzt und verändert bei den Jacobi-Transformationen.
     // a_jacobi ist nach der letzten Iteration bereits Aₕ, aber Aₕ wird danach noch einmal
