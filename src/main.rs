@@ -184,6 +184,8 @@ fn print_mat(name: &str, mat: &Mat) -> String {
     }
     // Zeilenumbruch nach Matrix
     str += "\n";
+
+    str
 }
 
 fn nichtnull_unter_nebendiag(mat: &Mat) -> Vec<(usize, usize)> {
