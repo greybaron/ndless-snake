@@ -92,7 +92,7 @@ fn main() {
     //     [9.0, 3.0, 11.0, 12.0],
     //     [12.0, 1.0, 6.0, 7.0],
     // ];
-    let a = Mat::default();
+    let mut a = Mat::default();
     for zeile in a.iter_mut() {
         for j in zeile.iter_mut() {
             *j = SmallRng::gen_range(&mut small_rng, 0..5) as f32;
@@ -170,8 +170,6 @@ fn main() {
 
 fn print_mat(name: &str, mat: &Mat) -> String {
     let mut str = String::new();
-    // let hor_strich_breite = mat.len() * 10 - 1;
-    let hor_strich_breite = 5;
 
     // Name gefolgt vom ersten horizontalen Trennstrich
     str += &format!("{name}:\n");
