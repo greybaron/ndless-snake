@@ -78,7 +78,12 @@ impl MatrixOperationen for Mat {
 
 fn main() {
 
-    
+    let mut small_rng = SmallRng::seed_from_u64(
+        SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)  
+            .unwrap()
+            .as_secs(),
+    );
 
     let mut mess = String::new();
     // let a = [
@@ -88,9 +93,9 @@ fn main() {
     //     [12.0, 1.0, 6.0, 7.0],
     // ];
     let a = Mat::default();
-    for zeile in a.iter().enumerate() {
+    for zeile in a {
         for j in zeile {
-            *j = SmallRng::gen_range(small_rng, 0..5);
+            j = SmallRng::gen_range(&mut small_rng, 0..5);
         }
     }
 
