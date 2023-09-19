@@ -74,12 +74,13 @@ impl MatrixOperationen for Mat {
 
 fn main() {
     let mut mess = String::new();
-    let a = [
-        [1.0, 2.0, 3.0, 4.0],
-        [5.0, 6.0, 7.0, 6.0],
-        [9.0, 3.0, 11.0, 12.0],
-        [12.0, 1.0, 6.0, 7.0],
-    ];
+    // let a = [
+    //     [1.0, 2.0, 3.0, 4.0],
+    //     [5.0, 6.0, 7.0, 6.0],
+    //     [9.0, 3.0, 11.0, 12.0],
+    //     [12.0, 1.0, 6.0, 7.0],
+    // ];
+    let a = Mat::new_random(8, 8);
 
     // wird benutzt und verändert bei den Jacobi-Transformationen.
     // a_jacobi ist nach der letzten Iteration bereits Aₕ, aber Aₕ wird danach noch einmal
