@@ -152,10 +152,11 @@ fn main() {
 
 fn print_mat(name: &str, mat: &Mat) -> String {
     let mut str = String::new();
-    let hor_strich_breite = mat.len() * 10 - 1;
+    // let hor_strich_breite = mat.len() * 10 - 1;
+    let hor_strich_breite = 5;
 
     // Name gefolgt vom ersten horizontalen Trennstrich
-    str += &format!("{name}:\n{:—<1$}", "", hor_strich_breite);
+    str += &format!("{name}:\n");
 
 
     for zeile in mat {
@@ -166,7 +167,7 @@ fn print_mat(name: &str, mat: &Mat) -> String {
             str += &format!(" {:^7.7} |", element.to_string());
         }
         // Zeilenumbruch und horizontaler Trennstrich nach jeder Zeile
-        str += &format!("\n {:—<1$}\n", "", hor_strich_breite);
+        str += "\n";
     }
     // Zeilenumbruch nach Matrix
     str += "\n";
