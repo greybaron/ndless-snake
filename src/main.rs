@@ -180,7 +180,7 @@ fn print_mat(name: &str, mat: &Mat) -> String {
             str += &format!(" {:^7.7} |", element.to_string());
         }
         // Zeilenumbruch und horizontaler Trennstrich nach jeder Zeile
-        str += !format!("\n {:—<1$}\n", "", hor_strich_breite);
+        str += &!format!("\n {:—<1$}\n", "", hor_strich_breite);
     }
     // Zeilenumbruch nach Matrix
     str += "\n";
