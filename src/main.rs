@@ -124,6 +124,7 @@ fn main() {
         let u = jacobi_transform(&mut a_jacobi, *i0, *j0, iteration, &mut mess);
         u_matrizen.push(u);
     }
+    println!("jacobi done.");
 
     // (erneute) Erzeugung der Matrizen Aₕ und A
     // Variable 'acc(umulator)' wird als Einheitsmatrix initialisiert (Mat::neu_einheit());
@@ -164,6 +165,8 @@ fn main() {
         .multipliziere(&ah_rekonstr_mat)
         .multipliziere(&u321_transponiert_multipliziert);
     mess += &print_mat(&a_rekonstr_titel, &a_rekonstr_mat.runde(4));
+
+    println!("rekonst done.");
 
     msg("Hessenberg", &mess);
 }
