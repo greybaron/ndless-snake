@@ -1,25 +1,8 @@
 #![no_std]
-
 extern crate alloc;
 extern crate ndless_handler;
-
-use alloc::collections::VecDeque;
-use ndless::time::Duration;
-
 use ndless::prelude::*;
-
-use ndless::input::{iter_keys, wait_key_pressed, wait_no_key_pressed, Key};
-use ndless::process::exit;
-use ndless::thread::sleep;
-use ndless_sdl::nsdl::Font;
-
-use ndless::msg::{msg_2b, msg_3b, Button};
-
-use ndless_sdl::gfx::framerate::FPS;
-use ndless_sdl::video::Surface;
-use rand::rngs::SmallRng;
-use rand::{Rng, SeedableRng};
-
+use ndless::msg::msg;
 
 type Mat = [[f32; 4]; 4];
 
@@ -162,10 +145,12 @@ fn main() {
         .multipliziere(&ah_rekonstr_mat)
         .multipliziere(&u321_transponiert_multipliziert);
     print_mat(&a_rekonstr_titel, &a_rekonstr_mat.runde(4));
+
+    msg("Hessenberg", &mess);
 }
 
 fn print_mat(name: &str, mat: &Mat) -> String {
-    let str = String::new();
+    let mut str = String::new();
     let hor_strich_breite = mat.len() * 10 - 1;
 
     // Name gefolgt vom ersten horizontalen Trennstrich
@@ -180,7 +165,7 @@ fn print_mat(name: &str, mat: &Mat) -> String {
             str += &format!(" {:^7.7} |", element.to_string());
         }
         // Zeilenumbruch und horizontaler Trennstrich nach jeder Zeile
-        str += &!format!("\n {:—<1$}\n", "", hor_strich_breite);
+        str += &format!("\n {:—<1$}\n", "", hor_strich_breite);
     }
     // Zeilenumbruch nach Matrix
     str += "\n";
