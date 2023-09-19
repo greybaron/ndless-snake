@@ -203,7 +203,7 @@ fn nichtnull_unter_nebendiag(mat: &Mat) -> Vec<(usize, usize)> {
     res
 }
 
-fn jacobi_transform(a: &mut Mat, i0: usize, j0: usize, iteration: usize, &mut mess: String) -> Mat {
+fn jacobi_transform(a: &mut Mat, i0: usize, j0: usize, iteration: usize, mess: &mut String) -> Mat {
     // Rotationsindex
     let (p0, q0) = (j0 + 1, i0);
 
