@@ -410,7 +410,7 @@ fn new_food_cell(small_rng: &mut SmallRng, cells: &VecDeque<Cell>, difficulty: &
 }
 
 fn get_random_cell(small_rng: &mut SmallRng, difficulty: &u8) -> Cell {
-    if difficulty == 0 {
+    if *difficulty == 0 {
         Cell {
             x: SmallRng::gen_range(small_rng, 1..38) * 5,
             y: SmallRng::gen_range(small_rng, 1..28) * 5,
