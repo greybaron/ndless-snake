@@ -61,7 +61,7 @@ fn main() {
     // game loop start
     let mut restart_game = true;
     while restart_game {
-        let background = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap();
+        let background = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap_or_default();
         clear_screen(&screen, &background);
 
         start_game_loop(
