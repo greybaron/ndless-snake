@@ -61,11 +61,11 @@ fn main() {
     while restart_game {
         let background = ndless_sdl::image::load_file("/documents/harald.gif.tns").ok();
 
-        clear_screen(&screen, &background);
+        clear_screen(&screen, background.as_ref());
 
         start_game_loop(
             &screen,
-            &background,
+            background.as_ref(),
             &mut manager,
             &fonts,
             &mut gradient_calculator,
