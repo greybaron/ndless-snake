@@ -4,6 +4,7 @@ extern crate alloc;
 extern crate ndless_handler;
 
 use alloc::collections::VecDeque;
+use ndless::fs::File;
 use ndless::time::Duration;
 
 use ndless::prelude::*;
@@ -59,7 +60,14 @@ fn main() {
     // game loop start
     let mut restart_game = true;
     while restart_game {
-        let background = ndless_sdl::image::load_file("/documents/harald.gif.tns").ok();
+        let bg_file = File::open("/documents/harald.gif.tns");
+        let background = match bg_file {
+            Ok(_) => ndless_sdl::image::load_file("/documents/harald.gif.tns").ok(),
+            Err(_) => {
+                None
+            }
+        };
+        
 
         clear_screen(&screen, background.as_ref());
 
