@@ -108,7 +108,7 @@ fn start_game_loop(
     small_rng: &mut SmallRng,
     difficulty: &mut u8,
 ) {
-    let test = ndless_sdl::image::load_file("/documents/harald.bmp.tns");
+    let test = ndless_sdl::image::load_file("/documents/harald.gif.tns");
     println!("{:?}", test);
     return;
     let mut pts: u16 = 0;
