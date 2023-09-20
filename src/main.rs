@@ -11,7 +11,6 @@ use ndless::prelude::*;
 
 use ndless::input::{iter_keys, wait_key_pressed, wait_no_key_pressed, Key};
 use ndless::process::exit;
-use ndless::thread::sleep;
 use ndless::time::SystemTime;
 use ndless_sdl::nsdl::{Font, FontOptions};
 
@@ -279,7 +278,7 @@ fn start_game_loop(
         if head.x == food_cell.x && head.y == food_cell.y {
             pts += 1;
             length += 2;
-            food_cell = new_food_cell(small_rng, &cells);
+            food_cell = new_food_cell(small_rng, &cells, &difficulty);
         }
 
         screen.flip();
