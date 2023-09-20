@@ -110,9 +110,6 @@ fn start_game_loop(
 ) {
     let test = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap();
 
-
-    println!("{:?}", test);
-    return;
     let mut pts: u16 = 0;
     let mut length: u16 = 10;
     let mut cells: VecDeque<Cell> = VecDeque::new();
