@@ -197,15 +197,14 @@ fn start_game_loop(
         if cells.len() > usize::from(length) {
             let delete_cell = cells.pop_front().unwrap();
 
-            screen.fill_rect(
+            let del_cell_rect = 
                 Some(ndless_sdl::Rect {
                     x: delete_cell.x,
                     y: delete_cell.y,
                     w: 5,
                     h: 5,
-                }),
-                ndless_sdl::video::RGB(0, 0, 0),
-            );
+                });
+            screen.blit_rect(background, del_cell_rect, del_cell_rect);
         }
 
         // draw score
