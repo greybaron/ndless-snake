@@ -108,7 +108,9 @@ fn start_game_loop(
     small_rng: &mut SmallRng,
     difficulty: &mut u8,
 ) {
-    let test = ndless_sdl::image::load_file("/documents/harald.gif.tns");
+    let test = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap();
+
+
     println!("{:?}", test);
     return;
     let mut pts: u16 = 0;
@@ -183,16 +185,17 @@ fn start_game_loop(
             return;
         }
 
-        // blank score area before redrawing
-        screen.fill_rect(
-            Some(ndless_sdl::Rect {
-                x: 10,
-                y: 10,
-                w: 80,
-                h: 8,
-            }),
-            ndless_sdl::video::RGB(0, 0, 0),
-        );
+        // // blank score area before redrawing
+        // screen.fill_rect(
+        //     Some(ndless_sdl::Rect {
+        //         x: 10,
+        //         y: 10,
+        //         w: 80,
+        //         h: 8,
+        //     }),
+        //     ndless_sdl::video::RGB(0, 0, 0),
+        // );
+        screen.blit_rect(&test, None, None);
 
         // dont remove oldest vec item if score increased
         if cells.len() > usize::from(length) {
