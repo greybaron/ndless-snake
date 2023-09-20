@@ -5,7 +5,6 @@ extern crate ndless_handler;
 
 use alloc::collections::VecDeque;
 use ndless::fs::File;
-use ndless::time::Duration;
 
 use ndless::prelude::*;
 
