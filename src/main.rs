@@ -26,8 +26,6 @@ struct Cell {
     y: i16,
 }
 
-
-
 fn main() {
     // screen setup
     let screen = ndless_sdl::init_default().expect("failed to set video mode");
@@ -61,15 +59,7 @@ fn main() {
     // game loop start
     let mut restart_game = true;
     while restart_game {
-        let background = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap();
-        let b2 = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap_or_else(|_| {
-            ndless_sdl::Rect {
-                x: 0,
-                y: 0,
-                w: 320,
-                h: 240,
-            }.into()
-        });
+        let background = ndless_sdl::image::load_file("/documents/harald.gif.tns").ok();
 
         clear_screen(&screen, &background);
 
@@ -113,7 +103,7 @@ fn gradient_calculator() -> impl FnMut(usize) -> Vec<u8> {
 
 fn start_game_loop(
     screen: &Surface,
-    background: &Surface,
+    background: Option<&Surface>,
     manager: &mut FPS,
     fonts: &[Font],
     mut gradient_calculator: impl FnMut(usize) -> Vec<u8>,
@@ -199,21 +189,28 @@ fn start_game_loop(
             w: 80,
             h: 8,
         });
-        screen.blit_rect(background, score_area, score_area);
-        
+        if let Some(background) = background {
+            screen.blit_rect(background, score_area, score_area);
+        } else {
+            screen.fill_rect(score_area, ndless_sdl::video::RGB(0, 0, 0));
+        }
 
         // dont remove oldest vec item if score increased
         if cells.len() > usize::from(length) {
             let delete_cell = cells.pop_front().unwrap();
 
-            let del_cell_rect = 
-                Some(ndless_sdl::Rect {
-                    x: delete_cell.x,
-                    y: delete_cell.y,
-                    w: 5,
-                    h: 5,
-                });
-            screen.blit_rect(background, del_cell_rect, del_cell_rect);
+            let del_cell_rect = Some(ndless_sdl::Rect {
+                x: delete_cell.x,
+                y: delete_cell.y,
+                w: 5,
+                h: 5,
+            });
+
+            if let Some(background) = background {
+                screen.blit_rect(background, del_cell_rect, del_cell_rect);
+            } else {
+                screen.fill_rect(del_cell_rect, ndless_sdl::video::RGB(0, 0, 0));
+            }
         }
 
         // draw score
@@ -282,17 +279,20 @@ fn start_game_loop(
     }
 }
 
-fn clear_screen(screen: &Surface, background: &Surface) {
-    // screen.fill_rect(
-    //     Some(ndless_sdl::Rect {
-    //         x: 0,
-    //         y: 0,
-    //         w: 320,
-    //         h: 240,
-    //     }),
-    //     ndless_sdl::video::RGB(0, 0, 0),
-    // );
-    screen.blit_rect(background, None, None);
+fn clear_screen(screen: &Surface, background: Option<&Surface>) {
+    if let Some(background) = background {
+        screen.blit_rect(background, None, None);
+    } else {
+        screen.fill_rect(
+            Some(ndless_sdl::Rect {
+                x: 0,
+                y: 0,
+                w: 320,
+                h: 240,
+            }),
+            ndless_sdl::video::RGB(0, 0, 0),
+        );
+    }
 }
 
 fn get_direction(input: u8, current: u8) -> (u8, bool) {
