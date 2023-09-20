@@ -61,10 +61,12 @@ fn main() {
     // game loop start
     let mut restart_game = true;
     while restart_game {
+        let background = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap();
         clear_screen(&screen, &background);
 
         start_game_loop(
             &screen,
+            &background,
             &mut manager,
             &fonts,
             &mut gradient_calculator,
@@ -102,14 +104,13 @@ fn gradient_calculator() -> impl FnMut(usize) -> Vec<u8> {
 
 fn start_game_loop(
     screen: &Surface,
+    background: &Surface,
     manager: &mut FPS,
     fonts: &[Font],
     mut gradient_calculator: impl FnMut(usize) -> Vec<u8>,
     small_rng: &mut SmallRng,
     difficulty: &mut u8,
 ) {
-    let background = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap();
-
     let mut pts: u16 = 0;
     let mut length: u16 = 10;
     let mut cells: VecDeque<Cell> = VecDeque::new();
