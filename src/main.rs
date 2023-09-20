@@ -26,6 +26,8 @@ struct Cell {
     y: i16,
 }
 
+
+
 fn main() {
     // screen setup
     let screen = ndless_sdl::init_default().expect("failed to set video mode");
@@ -106,6 +108,9 @@ fn start_game_loop(
     small_rng: &mut SmallRng,
     difficulty: &mut u8,
 ) {
+    let test = ndless_sdl::image::load_file("/documents/harald.bmp.tns");
+    println!("{:?}", test);
+    return;
     let mut pts: u16 = 0;
     let mut length: u16 = 10;
     let mut cells: VecDeque<Cell> = VecDeque::new();
