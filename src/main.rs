@@ -175,9 +175,9 @@ fn start_game_loop(
                     }
                 }
             }
-            if difficulty != &2 {
-                sleep(Duration::from_millis(2))
-            }
+            // if difficulty != &2 {
+            //     sleep(Duration::from_millis(2))
+            // }
         }
 
         let mut head = Cell {
