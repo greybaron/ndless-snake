@@ -128,7 +128,7 @@ fn start_game_loop(
     let mut mov_direction: u8 = 0; // 0=right 1=down 2=left 3=up
 
     // first food location
-    let mut food_cell = new_food_cell(small_rng, &cells);
+    let mut food_cell = new_food_cell(small_rng, &cells, &difficulty);
 
     loop {
         let gradients = gradient_calculator(cells.len());
@@ -386,12 +386,12 @@ fn difficulty_inp(manager: &mut FPS, difficulty: &mut u8) {
     }
 }
 
-fn new_food_cell(small_rng: &mut SmallRng, cells: &VecDeque<Cell>) -> Cell {
+fn new_food_cell(small_rng: &mut SmallRng, cells: &VecDeque<Cell>, difficulty: &u8) -> Cell {
     let mut new_cell = None;
 
     let mut cell_available = false;
     while !cell_available {
-        new_cell = Some(get_random_cell(small_rng));
+        new_cell = Some(get_random_cell(small_rng, difficulty));
 
         for snake_cell in cells {
             if snake_cell.x == new_cell.as_ref().unwrap().x
@@ -409,10 +409,17 @@ fn new_food_cell(small_rng: &mut SmallRng, cells: &VecDeque<Cell>) -> Cell {
     new_cell.unwrap()
 }
 
-fn get_random_cell(small_rng: &mut SmallRng) -> Cell {
-    Cell {
-        x: SmallRng::gen_range(small_rng, 0..39) * 5,
-        y: SmallRng::gen_range(small_rng, 0..29) * 5,
+fn get_random_cell(small_rng: &mut SmallRng, difficulty: &u8) -> Cell {
+    if difficulty == 0 {
+        Cell {
+            x: SmallRng::gen_range(small_rng, 1..38) * 5,
+            y: SmallRng::gen_range(small_rng, 1..28) * 5,
+        }
+    } else {
+        Cell {
+            x: SmallRng::gen_range(small_rng, 0..39) * 5,
+            y: SmallRng::gen_range(small_rng, 0..29) * 5,
+        }
     }
 }
 
