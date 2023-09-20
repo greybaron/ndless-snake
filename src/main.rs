@@ -183,16 +183,14 @@ fn start_game_loop(
             return;
         }
 
-        // // blank score area before redrawing
-        // screen.fill_rect(
-        //     Some(ndless_sdl::Rect {
-        //         x: 10,
-        //         y: 10,
-        //         w: 80,
-        //         h: 8,
-        //     }),
-        //     ndless_sdl::video::RGB(0, 0, 0),
-        // );
+        // blank score area before redrawing
+        let score_area = Some(ndless_sdl::Rect {
+            x: 10,
+            y: 10,
+            w: 80,
+            h: 8,
+        });
+        screen.blit_rect(background, score_area, score_area);
         
 
         // dont remove oldest vec item if score increased
