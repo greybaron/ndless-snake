@@ -61,7 +61,7 @@ fn main() {
     // game loop start
     let mut restart_game = true;
     while restart_game {
-        clear_screen(&screen);
+        clear_screen(&screen, &background);
 
         start_game_loop(
             &screen,
@@ -108,7 +108,7 @@ fn start_game_loop(
     small_rng: &mut SmallRng,
     difficulty: &mut u8,
 ) {
-    let test = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap();
+    let background = ndless_sdl::image::load_file("/documents/harald.gif.tns").unwrap();
 
     let mut pts: u16 = 0;
     let mut length: u16 = 10;
@@ -192,7 +192,7 @@ fn start_game_loop(
         //     }),
         //     ndless_sdl::video::RGB(0, 0, 0),
         // );
-        screen.blit_rect(&test, None, None);
+        
 
         // dont remove oldest vec item if score increased
         if cells.len() > usize::from(length) {
@@ -275,16 +275,17 @@ fn start_game_loop(
     }
 }
 
-fn clear_screen(screen: &Surface) {
-    screen.fill_rect(
-        Some(ndless_sdl::Rect {
-            x: 0,
-            y: 0,
-            w: 320,
-            h: 240,
-        }),
-        ndless_sdl::video::RGB(0, 0, 0),
-    );
+fn clear_screen(screen: &Surface, background: &Surface) {
+    // screen.fill_rect(
+    //     Some(ndless_sdl::Rect {
+    //         x: 0,
+    //         y: 0,
+    //         w: 320,
+    //         h: 240,
+    //     }),
+    //     ndless_sdl::video::RGB(0, 0, 0),
+    // );
+    screen.blit_rect(background, None, None);
 }
 
 fn get_direction(input: u8, current: u8) -> (u8, bool) {
