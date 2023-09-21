@@ -14,6 +14,7 @@ use ndless::time::SystemTime;
 use ndless_sdl::nsdl::{Font, FontOptions};
 
 use ndless::msg::{msg_2b, msg_3b, Button};
+use ndless::fs;
 
 use ndless_sdl::gfx::framerate::FPS;
 use ndless_sdl::video::Surface;
