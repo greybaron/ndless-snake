@@ -428,8 +428,8 @@ fn gameover_handler() -> bool {
 
 fn load_next_background() -> Option<&Surface> {
     let bg_file = File::open("/documents/harald.gif.tns");
-    let background = match bg_file {
+    match bg_file {
         Ok(_) => ndless_sdl::image::load_file("/documents/harald.gif.tns").ok(),
         Err(_) => None,
-    };
+    }
 }
