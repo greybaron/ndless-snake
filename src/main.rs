@@ -29,9 +29,6 @@ fn main() {
     // screen setup
     let screen = ndless_sdl::init_default().expect("failed to set video mode");
 
-    let mut bg_idx = 0;
-    let mut background = load_next_background(&mut bg_idx);
-
     // used for score, color indicates difficulty
     let fonts = vec![
         // easy
@@ -65,7 +62,6 @@ fn main() {
 
         start_game_loop(
             &screen,
-            background.as_ref(),
             &mut manager,
             &fonts,
             &mut gradient_calculator,
@@ -103,7 +99,6 @@ fn gradient_calculator() -> impl FnMut(usize) -> Vec<u8> {
 
 fn start_game_loop(
     screen: &Surface,
-    background: Option<&Surface>,
     manager: &mut FPS,
     fonts: &[Font],
     mut gradient_calculator: impl FnMut(usize) -> Vec<u8>,
@@ -113,6 +108,9 @@ fn start_game_loop(
     let mut pts: u16 = 0;
     let mut length: u16 = 10;
     let mut cells: VecDeque<Cell> = VecDeque::new();
+
+    let mut bg_idx = 0;
+    let mut background = load_next_background(&mut bg_idx);
 
     // initial spawn location
     cells.push_front(Cell { x: 160, y: 120 });
@@ -194,7 +192,7 @@ fn start_game_loop(
             h: 8,
         });
         if let Some(background) = background {
-            screen.blit_rect(background, score_area, score_area);
+            screen.blit_rect(&background, score_area, score_area);
         } else {
             screen.fill_rect(score_area, ndless_sdl::video::RGB(0, 0, 0));
         }
@@ -211,7 +209,7 @@ fn start_game_loop(
             });
 
             if let Some(background) = background {
-                screen.blit_rect(background, del_cell_rect, del_cell_rect);
+                screen.blit_rect(&background, del_cell_rect, del_cell_rect);
             } else {
                 screen.fill_rect(del_cell_rect, ndless_sdl::video::RGB(0, 0, 0));
             }
