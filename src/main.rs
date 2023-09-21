@@ -190,7 +190,7 @@ fn start_game_loop(
             w: 80,
             h: 8,
         });
-        if let Some(background) = background {
+        if let Some(ref background) = background {
             screen.blit_rect(&background, score_area, score_area);
         } else {
             screen.fill_rect(score_area, ndless_sdl::video::RGB(0, 0, 0));
@@ -207,7 +207,7 @@ fn start_game_loop(
                 h: 5,
             });
 
-            if let Some(background) = background {
+            if let Some(ref background) = background {
                 screen.blit_rect(&background, del_cell_rect, del_cell_rect);
             } else {
                 screen.fill_rect(del_cell_rect, ndless_sdl::video::RGB(0, 0, 0));
