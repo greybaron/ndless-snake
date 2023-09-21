@@ -430,7 +430,7 @@ fn gameover_handler() -> bool {
 
 fn load_next_background(bg_idx: &mut usize) -> Option<Surface> {
     let bg_files = fs::read_dir("/documents/backgrounds");
-    let surface = match bg_files {
+    match bg_files {
         Err(_) => None,
         Ok(mut dir) => {
             let file_count = dir.clone().count();
@@ -443,9 +443,5 @@ fn load_next_background(bg_idx: &mut usize) -> Option<Surface> {
                 },
             }
         }
-    };
-
-
-
-    // let bg_file = File::open("/documents/harald.gif.tns");
+    }
 }
