@@ -57,8 +57,6 @@ fn main() {
     // game loop start
     let mut restart_game = true;
     while restart_game {
-        clear_screen(&screen, background.as_ref());
-
         start_game_loop(
             &screen,
             &mut manager,
