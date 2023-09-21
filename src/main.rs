@@ -29,6 +29,8 @@ fn main() {
     // screen setup
     let screen = ndless_sdl::init_default().expect("failed to set video mode");
 
+    let mut background = load_next_background();
+
     // used for score, color indicates difficulty
     let fonts = vec![
         // easy
@@ -58,15 +60,6 @@ fn main() {
     // game loop start
     let mut restart_game = true;
     while restart_game {
-        let bg_file = File::open("/documents/harald.gif.tns");
-        let background = match bg_file {
-            Ok(_) => ndless_sdl::image::load_file("/documents/harald.gif.tns").ok(),
-            Err(_) => {
-                None
-            }
-        };
-        
-
         clear_screen(&screen, background.as_ref());
 
         start_game_loop(
@@ -431,4 +424,12 @@ fn gameover_handler() -> bool {
     );
     // true if button 1 pressed == game restart requested
     matches!(button_pressed, Button::One)
+}
+
+fn load_next_background() -> Option<&Surface> {
+    let bg_file = File::open("/documents/harald.gif.tns");
+    let background = match bg_file {
+        Ok(_) => ndless_sdl::image::load_file("/documents/harald.gif.tns").ok(),
+        Err(_) => None,
+    };
 }
