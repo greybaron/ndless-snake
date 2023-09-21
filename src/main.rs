@@ -12,7 +12,6 @@ use ndless::process::exit;
 use ndless::time::SystemTime;
 use ndless_sdl::nsdl::{Font, FontOptions};
 
-use ndless::fs::{self, DirEntry};
 use ndless::msg::{msg_2b, msg_3b, Button};
 
 use ndless_sdl::gfx::framerate::FPS;
