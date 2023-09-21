@@ -12,7 +12,7 @@ use ndless::process::exit;
 use ndless::time::SystemTime;
 use ndless_sdl::nsdl::{Font, FontOptions};
 
-use ndless::fs;
+use ndless::fs::{self, DirEntry};
 use ndless::msg::{msg_2b, msg_3b, Button};
 
 use ndless_sdl::gfx::framerate::FPS;
@@ -435,7 +435,7 @@ fn load_next_background(bg_idx: &mut usize) -> Option<Surface> {
         Ok(mut dir) => {
             dbg!(&dir);
             dbg!(&bg_idx);
-            dbg!(dir.by_ref().collect());
+            dbg!(dir.by_ref().collect::<Vec<DirEntry>>());
             let file_count = dir.by_ref().count();
             let bg_file = dir.nth(*bg_idx).unwrap();
             match bg_file {
