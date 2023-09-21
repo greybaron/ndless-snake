@@ -433,14 +433,10 @@ fn load_next_background(bg_idx: &mut usize) -> Option<Surface> {
     match bg_files {
         Err(_) => None,
         Ok(mut dir) => {
-            dbg!(&dir);
             dbg!(&bg_idx);
-            // dbg!(dir.by_ref().collect::<Vec<Result<DirEntry, ndless::io::Error>>>());
-            let file_count = dir.by_ref().count();
-            dbg!(file_count);
-            
             let file_count = fs::read_dir("/documents/backgrounds").iter().count();
-            dbg!(file_count);
+            dbg!(&file_count);
+
             let bg_file = dir.nth(*bg_idx).unwrap();
             match bg_file {
                 Err(_) => None,
