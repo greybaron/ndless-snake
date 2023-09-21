@@ -13,8 +13,8 @@ use ndless::process::exit;
 use ndless::time::SystemTime;
 use ndless_sdl::nsdl::{Font, FontOptions};
 
-use ndless::msg::{msg_2b, msg_3b, Button};
 use ndless::fs;
+use ndless::msg::{msg_2b, msg_3b, Button};
 
 use ndless_sdl::gfx::framerate::FPS;
 use ndless_sdl::video::Surface;
@@ -430,10 +430,15 @@ fn gameover_handler() -> bool {
 
 fn load_next_background(bg_idx: &mut u8) -> Option<Surface> {
     let bg_files = fs::read_dir("/documents/backgrounds");
-    // let bg_file = File::open("/documents/harald.gif.tns");
-    let bg_file = bg_files.get(*bg_idx as usize).unwrap();
-    match bg_file {
-        Ok(f) => ndless_sdl::image::load_file(f).ok(),
+    match bg_files {
         Err(_) => None,
+        Ok(dir) => {
+            let bg_file = bg_files.get(*bg_idx as usize).unwrap();
+            match bg_file {
+                Err(_) => None,
+                Ok(f) => ndless_sdl::image::load_file(f).ok(),
+            }
+        }
     }
+    // let bg_file = File::open("/documents/harald.gif.tns");
 }
