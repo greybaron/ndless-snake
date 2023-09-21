@@ -161,6 +161,10 @@ fn start_game_loop(
 
                         Key::Scratchpad => pause_game(manager, difficulty),
 
+                        Key::Key5 => {
+                            background = load_next_background(&mut bg_idx);
+                        }
+
                         Key::Esc => exit(0),
 
                         _ => event_registered = false,
