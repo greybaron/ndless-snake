@@ -11,7 +11,7 @@ use ndless::input::{iter_keys, wait_key_pressed, wait_no_key_pressed, Key};
 use ndless::process::exit;
 use ndless::time::SystemTime;
 use ndless_sdl::nsdl::{Font, FontOptions};
-
+use ndless::fs;
 use ndless::msg::{msg_2b, msg_3b, Button};
 
 use ndless_sdl::gfx::framerate::FPS;
