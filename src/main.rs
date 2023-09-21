@@ -436,7 +436,7 @@ fn load_next_background(bg_idx: &mut u8) -> Option<Surface> {
             let bg_file = dir.nth(*bg_idx as usize).unwrap();
             match bg_file {
                 Err(_) => None,
-                Ok(f) => ndless_sdl::image::load_file(f.path()).ok(),
+                Ok(f) => ndless_sdl::image::load_file(f.path().to_str()).ok(),
             }
         }
     }
