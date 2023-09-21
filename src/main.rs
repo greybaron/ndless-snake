@@ -429,10 +429,11 @@ fn gameover_handler() -> bool {
 
 fn load_next_background(bg_idx: &mut usize) -> Option<Surface> {
     let bg_files = fs::read_dir("/documents/backgrounds");
+
     match bg_files {
         Err(_) => None,
         Ok(mut dir) => {
-            let file_count = dir.count();
+            let file_count = dir.by_ref().count();
             let bg_file = dir.nth(*bg_idx).unwrap();
             match bg_file {
                 Err(_) => None,
