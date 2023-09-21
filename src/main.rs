@@ -426,7 +426,7 @@ fn gameover_handler() -> bool {
     matches!(button_pressed, Button::One)
 }
 
-fn load_next_background() -> Option<&Surface> {
+fn load_next_background() -> Option<Surface> {
     let bg_file = File::open("/documents/harald.gif.tns");
     match bg_file {
         Ok(_) => ndless_sdl::image::load_file("/documents/harald.gif.tns").ok(),
