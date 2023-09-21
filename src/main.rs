@@ -432,8 +432,8 @@ fn load_next_background(bg_idx: &mut u8) -> Option<Surface> {
     let bg_files = fs::read_dir("/documents/backgrounds");
     match bg_files {
         Err(_) => None,
-        Ok(dir) => {
-            let bg_file = dir.get(*bg_idx as usize).unwrap();
+        Ok(mut dir) => {
+            let bg_file = dir.nth(*bg_idx as usize).unwrap();
             match bg_file {
                 Err(_) => None,
                 Ok(f) => ndless_sdl::image::load_file(f).ok(),
