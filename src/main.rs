@@ -428,17 +428,24 @@ fn gameover_handler() -> bool {
     matches!(button_pressed, Button::One)
 }
 
-fn load_next_background(bg_idx: &mut u8) -> Option<Surface> {
+fn load_next_background(bg_idx: &mut usize) -> Option<Surface> {
     let bg_files = fs::read_dir("/documents/backgrounds");
-    match bg_files {
+    let surface = match bg_files {
         Err(_) => None,
         Ok(mut dir) => {
-            let bg_file = dir.nth(*bg_idx as usize).unwrap();
+            let file_count = dir.clone().count();
+            let bg_file = dir.nth(*bg_idx).unwrap();
             match bg_file {
                 Err(_) => None,
-                Ok(f) => ndless_sdl::image::load_file(f.path().to_str().unwrap()).ok(),
+                Ok(f) => {
+                    *bg_idx = (*bg_idx + 1) % file_count;
+                    ndless_sdl::image::load_file(f.path().to_str().unwrap()).ok()
+                },
             }
         }
-    }
+    };
+
+
+
     // let bg_file = File::open("/documents/harald.gif.tns");
 }
