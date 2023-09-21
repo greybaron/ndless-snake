@@ -111,6 +111,8 @@ fn start_game_loop(
     let mut bg_idx = 0;
     let mut background = load_next_background(&mut bg_idx);
 
+    clear_screen(&screen, background.as_ref());
+
     // initial spawn location
     cells.push_front(Cell { x: 160, y: 120 });
 
