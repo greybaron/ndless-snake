@@ -5,9 +5,9 @@ extern crate ndless_handler;
 
 use alloc::collections::VecDeque;
 
+use ndless::path::PathBuf;
 use ndless::prelude::*;
 
-use ndless::fs;
 use ndless::input::{iter_keys, wait_key_pressed, wait_no_key_pressed, Key};
 use ndless::msg::{msg_2b, msg_3b, Button};
 
@@ -19,6 +19,7 @@ use ndless_sdl::video::Surface;
 use rand::rngs::SmallRng;
 use rand::{Rng, SeedableRng};
 
+use ndless::io::ErrorKind::NotFound;
 struct Cell {
     x: i16,
     y: i16,
@@ -28,17 +29,9 @@ fn main() {
     // screen setup
     let screen = ndless_sdl::init_default().expect("failed to set video mode");
 
-    // used for score, color indicates difficulty
-    let fonts = vec![
-        // easy
-        Font::new(FontOptions::VGA, 0, 255, 0),
-        // medium
-        Font::new(FontOptions::VGA, 77, 166, 255),
-        // hard
-        Font::new(FontOptions::VGA, 255, 0, 0),
-    ];
-
     let mut gradient_calculator = gradient_calculator();
+    let mut background_loader = background_loader();
+    let mut background = load_first_background();
 
     let mut manager = FPS::new();
     manager.framerate(20);
@@ -60,8 +53,9 @@ fn main() {
         let exit_intent = start_game_loop(
             &screen,
             &mut manager,
-            &fonts,
             &mut gradient_calculator,
+            &mut background_loader,
+            &mut background,
             &mut small_rng,
             &mut difficulty,
         );
@@ -104,8 +98,9 @@ fn gradient_calculator() -> impl FnMut(usize) -> Vec<u8> {
 fn start_game_loop(
     screen: &Surface,
     manager: &mut FPS,
-    fonts: &[Font],
     mut gradient_calculator: impl FnMut(usize) -> Vec<u8>,
+    mut background_loader: impl FnMut(&mut ndless::io::Result<Surface>),
+    background: &mut ndless::io::Result<Surface>,
     small_rng: &mut SmallRng,
     difficulty: &mut u8,
 ) -> bool {
@@ -113,10 +108,18 @@ fn start_game_loop(
     let mut length: u16 = 10;
     let mut cells: VecDeque<Cell> = VecDeque::new();
 
-    let mut bg_idx = 0;
-    let mut background = load_next_background(&mut bg_idx);
+    // used for score, color indicates difficulty
+    let fonts = vec![
+        // easy
+        Font::new(FontOptions::VGA, 0, 255, 0),
+        // medium
+        Font::new(FontOptions::VGA, 77, 166, 255),
+        // hard
+        Font::new(FontOptions::VGA, 255, 0, 0),
+    ];
 
-    clear_screen(screen, background.as_ref());
+    // let mut background = background_loader();
+    clear_screen(screen, background);
 
     // initial spawn location
     cells.push_front(Cell { x: 160, y: 120 });
@@ -171,7 +174,8 @@ fn start_game_loop(
                         }
 
                         Key::Key5 => {
-                            background = load_next_background(&mut bg_idx);
+                            background_loader(background);
+                            clear_screen(screen, background);
                         }
 
                         Key::Esc => return true,
@@ -203,7 +207,7 @@ fn start_game_loop(
             w: 80,
             h: 8,
         });
-        if let Some(ref background) = background {
+        if let Ok(ref background) = background {
             screen.blit_rect(background, score_area, score_area);
         } else {
             screen.fill_rect(score_area, ndless_sdl::video::RGB(0, 0, 0));
@@ -220,7 +224,7 @@ fn start_game_loop(
                 h: 5,
             });
 
-            if let Some(ref background) = background {
+            if let Ok(ref background) = background {
                 screen.blit_rect(background, del_cell_rect, del_cell_rect);
             } else {
                 screen.fill_rect(del_cell_rect, ndless_sdl::video::RGB(0, 0, 0));
@@ -294,8 +298,8 @@ fn start_game_loop(
     }
 }
 
-fn clear_screen(screen: &Surface, background: Option<&Surface>) {
-    if let Some(background) = background {
+fn clear_screen(screen: &Surface, background: &ndless::io::Result<Surface>) {
+    if let Ok(background) = background {
         screen.blit_rect(background, None, None);
     } else {
         screen.fill_rect(
@@ -447,24 +451,59 @@ fn gameover_handler() -> bool {
     matches!(button_pressed, Button::Two)
 }
 
-fn load_next_background(bg_idx: &mut usize) -> Option<Surface> {
-    let bg_files = fs::read_dir("/documents/backgrounds");
+fn load_first_background() -> ndless::io::Result<Surface> {
+    let path = PathBuf::from("/documents/backgrounds");
 
-    match bg_files {
-        Err(_) => None,
-        Ok(mut dir) => {
-            dbg!(&bg_idx);
-            let file_count = fs::read_dir("/documents/backgrounds").iter().count();
-            dbg!(&file_count);
+    if path.read_dir().is_ok() && !path.read_dir().unwrap().collect::<Vec<_>>().is_empty() {
+        if let Some(f) = path.read_dir().unwrap().next() {
+            return Ok(ndless_sdl::image::load_file(f?.path().to_str().unwrap()).unwrap());
+        }
+    }
 
-            let bg_file = dir.nth(*bg_idx).unwrap();
-            match bg_file {
-                Err(_) => None,
-                Ok(f) => {
-                    *bg_idx = (*bg_idx + 1) % file_count;
-                    ndless_sdl::image::load_file(f.path().to_str().unwrap()).ok()
-                }
+    Err(NotFound.into())
+}
+
+fn background_loader() -> impl FnMut(&mut ndless::io::Result<Surface>) {
+    let mut bg_idx: usize = 1;
+    let path = PathBuf::from("/documents/backgrounds");
+
+    let file_count = match path.read_dir() {
+        Ok(p) => p.collect::<Vec<_>>().len(),
+        Err(_) => 0,
+    };
+
+    move |background: &mut ndless::io::Result<Surface>| {
+        let mut files = path.read_dir().unwrap();
+        dbg!(&bg_idx);
+        // let bg_files = fs::read_dir("/documents/backgrounds");
+
+        match file_count {
+            0 | 1 => (),
+
+            _ => {
+                let bg_file = files.nth(bg_idx).unwrap().unwrap();
+                bg_idx = (bg_idx + 1) % file_count;
+                *background =
+                    Ok(ndless_sdl::image::load_file(bg_file.path().to_str().unwrap()).unwrap())
             }
         }
+
+        // let files: Vec<_> = files.collect();
+
+        // for file in files {
+        //     let file = file?;
+        //     println!("Path: {:?}", file.path());
+        // }
+
+        // dbg!(&bg_idx);
+        // let file_count = fs::read_dir("/documents/backgrounds").iter().count();
+        // dbg!(&file_count);
+
+        // let bg_file = files.nth(bg_idx).unwrap()?;
+        // let bg_file = files[*bg_idx]?;
+        // let test = files[*bg_idx]?;
+
+        // bg_idx = (bg_idx + 1) % file_count;
+        // // // // Ok(ndless_sdl::image::load_file(bg_file.path().to_str().unwrap()).unwrap())
     }
 }
