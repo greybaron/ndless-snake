@@ -7,12 +7,12 @@ use alloc::collections::VecDeque;
 
 use ndless::prelude::*;
 
+use ndless::fs;
 use ndless::input::{iter_keys, wait_key_pressed, wait_no_key_pressed, Key};
-use ndless::process::exit;
+use ndless::msg::{msg_2b, msg_3b, Button};
+
 use ndless::time::SystemTime;
 use ndless_sdl::nsdl::{Font, FontOptions};
-use ndless::fs;
-use ndless::msg::{msg_2b, msg_3b, Button};
 
 use ndless_sdl::gfx::framerate::FPS;
 use ndless_sdl::video::Surface;
@@ -55,9 +55,9 @@ fn main() {
     let mut difficulty: u8 = 1;
 
     // game loop start
-    let mut restart_game = true;
-    while restart_game {
-        start_game_loop(
+    // let mut restart_game = true;
+    loop {
+        let exit_intent = start_game_loop(
             &screen,
             &mut manager,
             &fonts,
@@ -65,7 +65,14 @@ fn main() {
             &mut small_rng,
             &mut difficulty,
         );
-        restart_game = gameover_handler();
+        // leave main if exit was explicitly requested in game loop
+        if exit_intent {
+            break;
+        };
+        let exit_intent = gameover_handler();
+        if exit_intent {
+            break;
+        };
     }
 }
 
@@ -101,7 +108,7 @@ fn start_game_loop(
     mut gradient_calculator: impl FnMut(usize) -> Vec<u8>,
     small_rng: &mut SmallRng,
     difficulty: &mut u8,
-) {
+) -> bool {
     let mut pts: u16 = 0;
     let mut length: u16 = 10;
     let mut cells: VecDeque<Cell> = VecDeque::new();
@@ -156,13 +163,18 @@ fn start_game_loop(
                             (mov_direction, event_registered) = get_direction(3, mov_direction)
                         }
 
-                        Key::Scratchpad => pause_game(manager, difficulty),
+                        Key::Scratchpad => {
+                            let exit_intent = pause_game(manager, difficulty);
+                            if exit_intent {
+                                return true;
+                            };
+                        }
 
                         Key::Key5 => {
                             background = load_next_background(&mut bg_idx);
                         }
 
-                        Key::Esc => exit(0),
+                        Key::Esc => return true,
 
                         _ => event_registered = false,
                     }
@@ -180,7 +192,8 @@ fn start_game_loop(
 
         if head.x > 315 || head.x < 0 || head.y > 235 || head.y < 0 {
             // player ran into wall: game over - leave game loop
-            return;
+            // send exit_intent=false
+            return false;
         }
 
         // blank score area before redrawing
@@ -222,7 +235,8 @@ fn start_game_loop(
             // self hit detection
             if i != cells.len() - 1 && cell.x == head.x && cell.y == head.y {
                 // player ran into self: game over - leave game loop
-                return;
+                // exit intent is false
+                return false;
             }
 
             let gradient = match gradients_iter.next() {
@@ -330,7 +344,8 @@ fn get_direction(input: u8, current: u8) -> (u8, bool) {
     }
 }
 
-fn pause_game(manager: &mut FPS, difficulty: &mut u8) {
+// return bool 'exit_intent', as we need to propagate shutdown intent to main (process::exit() will not free mem)
+fn pause_game(manager: &mut FPS, difficulty: &mut u8) -> bool {
     // wait for key up (otherwise, still pressed scratchpad key instantly resumes game)
     wait_no_key_pressed();
     loop {
@@ -340,14 +355,17 @@ fn pause_game(manager: &mut FPS, difficulty: &mut u8) {
             match key {
                 Key::Scratchpad => {
                     wait_no_key_pressed();
-                    return;
+                    // resume game, so no exit intent
+                    return false;
                 }
                 Key::Enter => {
                     wait_no_key_pressed();
                     difficulty_inp(manager, difficulty);
-                    return;
+                    // no exit intent
+                    return false;
                 }
-                Key::Esc => exit(0),
+                // signal exit
+                Key::Esc => return true,
                 _ => {}
             }
         }
@@ -417,6 +435,7 @@ fn get_random_cell(small_rng: &mut SmallRng, difficulty: &u8) -> Cell {
     }
 }
 
+// bool exit intent -> true if quit selected
 fn gameover_handler() -> bool {
     let button_pressed = msg_2b(
         "desmond der mondbaer",
@@ -425,7 +444,7 @@ fn gameover_handler() -> bool {
         "rage quit",
     );
     // true if button 1 pressed == game restart requested
-    matches!(button_pressed, Button::One)
+    matches!(button_pressed, Button::Two)
 }
 
 fn load_next_background(bg_idx: &mut usize) -> Option<Surface> {
@@ -444,7 +463,7 @@ fn load_next_background(bg_idx: &mut usize) -> Option<Surface> {
                 Ok(f) => {
                     *bg_idx = (*bg_idx + 1) % file_count;
                     ndless_sdl::image::load_file(f.path().to_str().unwrap()).ok()
-                },
+                }
             }
         }
     }
