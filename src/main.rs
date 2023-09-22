@@ -109,7 +109,7 @@ fn start_game_loop(
     let mut bg_idx = 0;
     let mut background = load_next_background(&mut bg_idx);
 
-    clear_screen(&screen, background.as_ref());
+    clear_screen(screen, background.as_ref());
 
     // initial spawn location
     cells.push_front(Cell { x: 160, y: 120 });
@@ -117,7 +117,7 @@ fn start_game_loop(
     let mut mov_direction: u8 = 0; // 0=right 1=down 2=left 3=up
 
     // first food location
-    let mut food_cell = new_food_cell(small_rng, &cells, &difficulty);
+    let mut food_cell = new_food_cell(small_rng, &cells, difficulty);
 
     loop {
         let gradients = gradient_calculator(cells.len());
@@ -191,7 +191,7 @@ fn start_game_loop(
             h: 8,
         });
         if let Some(ref background) = background {
-            screen.blit_rect(&background, score_area, score_area);
+            screen.blit_rect(background, score_area, score_area);
         } else {
             screen.fill_rect(score_area, ndless_sdl::video::RGB(0, 0, 0));
         }
@@ -208,7 +208,7 @@ fn start_game_loop(
             });
 
             if let Some(ref background) = background {
-                screen.blit_rect(&background, del_cell_rect, del_cell_rect);
+                screen.blit_rect(background, del_cell_rect, del_cell_rect);
             } else {
                 screen.fill_rect(del_cell_rect, ndless_sdl::video::RGB(0, 0, 0));
             }
@@ -272,7 +272,7 @@ fn start_game_loop(
         if head.x == food_cell.x && head.y == food_cell.y {
             pts += 1;
             length += 2;
-            food_cell = new_food_cell(small_rng, &cells, &difficulty);
+            food_cell = new_food_cell(small_rng, &cells, difficulty);
         }
 
         screen.flip();

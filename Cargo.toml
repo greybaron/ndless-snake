@@ -1,5 +1,5 @@
 [package]
-name = "nSnake"
+name = "n_snake"
 version = "1.0.0"
 authors = ["Florian Schmidt"]
 edition = "2021"
