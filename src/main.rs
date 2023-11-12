@@ -72,12 +72,12 @@ fn main() {
 
 // float math is way slower, but no problem for this beast of a machine
 fn gradient_calculator() -> impl FnMut(usize) -> Vec<u8> {
-    let mut v: Vec<u8> = Vec::new();
+    let mut v: Vec<u8> = vec![];
 
     // closure (reuses old vector if length is unchanged)
     move |length: usize| {
         if v.len() != length {
-            v = Vec::new();
+            v = vec![];
 
             let min: u8 = 80;
             let range: u8 = 255 - min;
@@ -109,7 +109,7 @@ fn start_game_loop(
     let mut cells: VecDeque<Cell> = VecDeque::new();
 
     // used for score, color indicates difficulty
-    let fonts = vec![
+    let fonts = [
         // easy
         Font::new(FontOptions::VGA, 0, 255, 0),
         // medium
@@ -474,8 +474,6 @@ fn background_loader() -> impl FnMut(&mut ndless::io::Result<Surface>) {
 
     move |background: &mut ndless::io::Result<Surface>| {
         let mut files = path.read_dir().unwrap();
-        dbg!(&bg_idx);
-        // let bg_files = fs::read_dir("/documents/backgrounds");
 
         match file_count {
             0 | 1 => (),
@@ -487,23 +485,5 @@ fn background_loader() -> impl FnMut(&mut ndless::io::Result<Surface>) {
                     Ok(ndless_sdl::image::load_file(bg_file.path().to_str().unwrap()).unwrap())
             }
         }
-
-        // let files: Vec<_> = files.collect();
-
-        // for file in files {
-        //     let file = file?;
-        //     println!("Path: {:?}", file.path());
-        // }
-
-        // dbg!(&bg_idx);
-        // let file_count = fs::read_dir("/documents/backgrounds").iter().count();
-        // dbg!(&file_count);
-
-        // let bg_file = files.nth(bg_idx).unwrap()?;
-        // let bg_file = files[*bg_idx]?;
-        // let test = files[*bg_idx]?;
-
-        // bg_idx = (bg_idx + 1) % file_count;
-        // // // // Ok(ndless_sdl::image::load_file(bg_file.path().to_str().unwrap()).unwrap())
     }
 }
