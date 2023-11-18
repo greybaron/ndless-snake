@@ -68,6 +68,8 @@ fn main() {
             break;
         };
     }
+
+    ndless_sdl::quit();
 }
 
 // float math is way slower, but no problem for this beast of a machine
